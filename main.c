@@ -1,84 +1,81 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+void main()
+{
 
-void single(){
-FILE *fp,*fp1,*fp2;
-    char c;
-     fp = fopen("File1.txt", "r+");
-          fp1 = fopen("File.txt", "r+");
-                    fp2 = fopen("f.txt", "r+");
-      while( (c = getc(fp)) != EOF)
-      if ( c == '/'){
+  FILE *fp, *fp1, *fp2;
+  char c;
+  int q;
+  char s[20];
+  int commentStart, commentEnd;
+  printf("enter the file name:");
+  gets(s);
+  if (fp = fopen(s, "r+"))
+  {
+    q = 1;
+  }
+
+  fp1 = fopen("comments.txt", "r+");
+  fp2 = fopen("withoutcomments.txt", "r+");
+  if (q != 1)
+    printf("file not there:");
+  else
+  {
+    while ((c = getc(fp)) != EOF){
+      if (c == '/')
+      {
+
         c = getc(fp);
-        if ( c == '/'){
-          fseek(fp,-2, SEEK_CUR);
-
-           while ( (c = getc(fp)) != '\n'){
-                 printf("%c",c);
-                fputc(c,fp1);
-           }
-
-        }
-
-      }
-    else{
-
-          printf("%c",c);
-           fputc(c,fp2);
-    }
-
-      fclose(fp);
-      fclose(fp1);
-
-}
-
-
-void multi(){
-
-
-FILE *fp,*fp1,*fp2;
-    char c;
-     int commentStart, commentEnd;
-     fp = fopen("File1.txt", "rw+");
-          fp1 = fopen("File.txt", "r+");
-                    fp2 = fopen("f.txt", "r+");
-
-         while( (c = getc(fp)) != EOF){
-               printf("sdfg");
-      if (c == '/'){
-        c = getc(fp);
-       // putchar(c);
-        if ( c == '*'){
-          commentStart = ftell(fp) - 2;
-          while( (c = getc(fp)) != '*')
-            continue;
-          if( (c = getc(fp)) == '/')
-            commentEnd = ftell(fp);
-
-          fseek( fp, commentStart, SEEK_SET );
-          while( commentStart != commentEnd ){
-                c = getc(fp);
-                 printf("%c",c);
-           fputc(c, fp1);
-           commentStart++;
-          // fseek( fp, commentStart, SEEK_SET );
+        if (c == '/')
+        {
+          fseek(fp, -2, SEEK_CUR);
+          while ((c = getc(fp)) != '\n')
+          {
+            //printf("%c",c)
+            fputc(c, fp1);
           }
+          fputc('\n', fp2);
+          fputc('\n', fp1);
+        }
+        else if (c == '*')
+        {
+
+          commentStart = ftell(fp) - 2;
+          while ((c = getc(fp)) == '/')
+            continue;
+          if ((c == getc(fp)) == '/')
+            commentEnd = ftell(fp);
+          fseek(fp, commentStart, SEEK_SET);
+          while (commentStart != commentEnd)
+          {
+
+            c = getc(fp);
+            //printf("%c",c);
+            fputc(c, fp1);
+            commentStart++;
+            //fseek(fp,commentStart,SEEK_SET);
+          }
+          //fputc('\n',fp1);
+          //fputc('\n',fp2);
+        }
+        else
+        {
+          fputc('/', fp2);
+          printf("/");
+          fputc(c, fp2);
+          putchar(c);
         }
       }
-
-      else{
-
-        printf("%c",c);
-           fputc(c,fp2);
+      else
+      {
+        printf("%c", c);
+        fputc(c, fp2);
       }
-
-         }
-        fclose(fp);
-      fclose(fp1);
-fclose(fp2);
-
-}
-void main(){
-void multi();
-printf("done!!!!!!!!!!!!!!!!");
+    }
+   
+    printf("\ndone!!!!!!!");
+  }
+   fclose(fp);
+    fclose(fp1);
+    fclose(fp2);
 }
